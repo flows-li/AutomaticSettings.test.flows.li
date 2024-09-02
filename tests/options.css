@@ -1,0 +1,13 @@
+@import "/css/photonOptions.css";
+
+a.button {
+	appearance: button;
+	text-decoration: none;
+	color: unset;
+}
+
+.icon {
+	vertical-align: middle;
+	width: 2em;
+	height: 2em;
+}
