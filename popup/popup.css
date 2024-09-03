@@ -1,0 +1,33 @@
+@import "/common/modules/AutomaticSettings/css/photonOptions.css";
+
+a.button {
+	appearance: button;
+	text-decoration: none;
+	color: unset;
+}
+
+.hidden {
+	display: none;
+}
+
+.icon {
+	vertical-align: middle;
+	width: 2em;
+	height: 2em;
+}
+
+.flex {
+	display: flex;
+}
+
+.items-center {
+	align-items: center;
+}
+
+.justify-end {
+	justify-content: flex-end;
+}
+
+.w-full {
+	width: 100%;
+}

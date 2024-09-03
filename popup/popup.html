@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="/common/common.css">
+	<link rel="stylesheet" href="popup.css">
+
+	<script defer src="../common/common.js" type="module"></script>
+	<!-- <script defer src="../common.js"></script> -->
+	<script defer src="./popup.js" type="module"></script>
+	<title>📤 Thunderbird Send</title>
+</head>
+
+<body>
+	<form id="form">
+		<section>
+			<h3><img src="/icons/icon.svg" class="icon"> Thunderbird Send</h3>
+			<p><a href="https://github.com/tdulcet/Thunderbird-Send" target="_blank"><button
+						data-i18n="__MSG_infoButton__" type="button">ℹ️
+						Information</button></a>
+				<button data-i18n="__MSG_optionsButton__" type="button" id="settings">⚙️ Options</button>
+				<a href="https://www.tealdulcet.com/" target="_blank"><button data-i18n="__MSG_donateButton__"
+						type="button">❤️ Donate</button></a>
+			</p>
+			<hr>
+			<div id="table"></div>
+			<div class="flex justify-end">
+				<div><span data-i18n="__MSG_popupTotalSize__">Total Size:</span> <span id="total"></span></div>
+			</div>
+
+			<template id="send-file">
+				<td class="flex items-center">
+					<svg class="icon">
+						<use xlink:href="/icons/blue_file.svg#icon" />
+					</svg>
+					<div class="w-full">
+						<!-- <span data-i18n="__MSG_popupFile__">Filename:</span>  --><strong><span id="name"></span></strong>
+						<br>
+						<!-- <span data-i18n="__MSG_popupSize__">Size:</span>  --><span id="size"></span>
+					</div>
+				</td>
+			</template>
+
+			<ul>
+				<li>
+					<div class="line">
+						<label for="downloads" data-i18n="__MSG_popupDownloadLimit__">Download limit</label>
+						<input class="setting" type="number" list="adownloads" id="downloads" name="downloads" min="1" size="10" required>
+						<datalist id="adownloads">
+							<option value="1">
+							<option value="2">
+							<option value="3">
+							<option value="4">
+							<option value="5">
+							<option value="20">
+							<option value="50">
+							<option value="100">
+						</datalist>
+					</div>
+					<span class="line indent helper-text" data-i18n="__MSG_popupDownloadLimitDesc__">The file will
+						expire after this number of downloads. Make sure it is less than the maximum downloads supported
+						by this Send service instance.</span>
+				</li>
+
+				<li>
+					<div class="line">
+						<label for="days" data-i18n="__MSG_popupTimeLimit__">Time limit</label>
+						<input class="setting" type="number" id="days" name="time" min="0" size="10" required>
+						<label for="days" data-i18n="__MSG_popupDays__">days</label>
+						<input class="setting" type="number" id="hours" name="time" min="0" size="10" required>
+						<label for="hours" data-i18n="__MSG_popupHours__">hours</label>
+						<input class="setting" type="number" id="minutes" name="time" min="0" size="10" required>
+						<label for="minutes" data-i18n="__MSG_popupMinutes__">minutes</label>
+					</div>
+					<span class="line indent helper-text" data-i18n="__MSG_popupTimeLimitDesc__">The file will expire
+						after this time. Make sure it is less than the maximum time supported by this Send service
+						instance.</span>
+				</li>
+
+				<li>
+					<details>
+						<summary data-i18n="__MSG_popupPwdProtect__">Protect with password (click to add)</summary>
+						<div class="message-container">
+							<div aria-label="warning message" class="message-box warning">
+								<span class="message-text" data-i18n="__MSG_popupPwdWarning__">Use different methods to
+									send the password and file to the recipients. Including the password in the same
+									e-mail as the link to the file does not provide any additional security.</span>
+							</div>
+						</div>
+						<br>
+						<div class="line">
+							<label for="password" data-i18n="__MSG_popupPassword__">Optional password</label>
+							<input class="setting" type="password" id="password" name="password" placeholder="Password" data-i18n data-i18n-placeholder="__MSG_popupPwdPlaceholder__" size="60">
+							<input class="setting" type="checkbox" id="toggle" name="toggle">
+							<label for="toggle" data-i18n="__MSG_popupPwdShow__">Show password</label>
+						</div>
+						<span class="line indent helper-text" data-i18n="__MSG_popupPwdHelp__">Optionally protect the
+							file with a password.</span>
+						<div class="line hidden" id="pronunciation">
+							<label for="text" data-i18n="__MSG_popupPwdPronunciation__">Password pronunciation</label>
+							<input class="setting" type="text" id="text" name="text" size="80" readonly>
+						</div>
+						<div class="line indent">
+							<details>
+								<summary data-i18n="__MSG_popupPwdSuggest__">Suggest strong password (click to show)
+								</summary>
+								<br>
+								<div class="line">
+									<select name="random" id="random">
+										<option data-i18n="__MSG_popupPwdGenOpt1__" data-i18n-title="__MSG_popupPwdGenOpt1Title__" value="1" title="Password with upper/lowercase letters, numbers and symbols">Password
+											with symbols (15 characters)</option>
+										<option data-i18n="__MSG_popupPwdGenOpt2__" data-i18n-title="__MSG_popupPwdGenOpt2Title__" value="2" title="Password with only upper/lowercase letters and numbers">Password (15
+											characters)</option>
+										<option data-i18n="__MSG_popupPwdGenOpt3__" data-i18n-title="__MSG_popupPwdGenOpt3Title__" value="3" title="Passphrase with long words up to 9 characters">
+											Passphrase, long words (6)</option>
+										<option data-i18n="__MSG_popupPwdGenOpt4__" data-i18n-title="__MSG_popupPwdGenOpt4Title__" value="4" title="Passphrase with short words up to 5 characters">
+											Passphrase, short words (8)</option>
+										<option data-i18n="__MSG_popupPwdGenOpt5__" data-i18n-title="__MSG_popupPwdGenOpt5Title__" value="5" title="Emoji password with basic emoji and the family, role, gendered, hair and other sequences">
+											Emoji password with sequences (7)</option>
+										<option data-i18n="__MSG_popupPwdGenOpt6__" data-i18n-title="__MSG_popupPwdGenOpt6Title__" value="6" title="Emoji password with only the basic emoji">Emoji
+											password (8)</option>
+									</select>
+									<button type="button" id="generate" data-i18n="__MSG_popupPwdGenButton__">🔒
+										Securely Generate</button>
+								</div>
+							</details>
+						</div>
+					</details>
+				</li>
+			</ul>
+		</section>
+
+		<div>
+			<hr />
+			<button data-i18n="__MSG_popupCancelButton__" type="button" id="cancel" disabled>❌ Cancel</button>
+			<button data-i18n="__MSG_popupUploadButton__" id="upload" disabled>📤 Encrypt and Upload</button>
+		</div>
+	</form>
+</body>
+
+</html>
